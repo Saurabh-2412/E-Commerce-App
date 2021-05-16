@@ -1,6 +1,8 @@
 @import url("https://ui-component-lib.netlify.app/style.css");
+
 .App {
   text-align: center;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .App-logo {
@@ -43,29 +45,67 @@ img {
   height: auto;
 }
 
-.CartList {
+.CartList { /*add this class to vcartlist ul*/
   padding: 0px;
   list-style-type: none;
   display: inline-block;
   margin: 0px;
 }
 
-li {
+.CartList li {
   list-style-type: none;
-  width: 20rem;
   height: auto;
   display: inline-block;
-  border: 2px solid gray;
-  padding: 2rem 0rem;
 }
 
-li > button {
+.CartList li > button {
   background-color: gray;
   color: white;
   font-size: 15px;
   font-weight: bold;
   border-radius: 5px;
   border: 2px solid gray;
+}
+
+.ProductList { /*add this class to vcartlist ul*/
+  padding: 0px;
+  list-style-type: none;
+  display: inline-block;
+  margin: 0px;
+}
+
+.ProductList li {
+  list-style-type: none;
+  width: 20rem;
+  height: auto;
+  display: inline-block;
+  border: 2px solid gray;
+  padding: 0 0 2rem 0;
+  margin: 10px;
+}
+
+.ProductList li img{
+  width: 100%;
+  height: auto;
+}
+
+.ProductList li > button {
+  background-color: gray;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 2px solid gray;
+}
+
+.horizontal{
+  display: flex;
+    flex-direction: row;
+    max-width: 25rem;
+    /* height: 5rem; */
+    /* width: 100%; */
+    /* height: 15rem; */
+    height:auto;
 }
 
 .navigation {
@@ -76,7 +116,7 @@ li > button {
   border-radius: 0.25rem;
   display: flex;
   align-items: stretch;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .nav-bttn {
@@ -84,6 +124,31 @@ li > button {
   padding: 5px;
   background-color: gray;
   color: white;
+}
+
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s;
+  text-align: right;
+}
+
+.active, .accordion:hover {
+  background-color: #ccc; 
+}
+
+.panel {
+  padding: 10px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
+  transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s;
 }
 
 @keyframes App-logo-spin {

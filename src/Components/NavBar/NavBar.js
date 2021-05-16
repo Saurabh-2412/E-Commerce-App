@@ -1,7 +1,7 @@
 import { NavLink }  from "react-router-dom";
 import React,{useState} from "react";
-import { CartHeader } from "./Cart/CartList";
-import { WishListHeader } from "./WishList/WishList";
+import { CartHeader } from "../Cart/CartList";
+import { WishListHeader } from "../WishList/WishList";
 
 function NavBar() {
 
@@ -29,21 +29,23 @@ function NavBar() {
         </nav>
         <nav className="navigation">
           <span
-            style={{ fontSize: "30px", cursor: "pointer",marginRight:"80rem" }}
+            style={{ fontSize: "30px", cursor: "pointer" }}
             onClick={toggleNav}
           >
             &#9776;
           </span>
-          <span
-            style={{ border: "2px solid gray", padding: "5px", marginRight:".8rem",fontWeight:"bolder" }}
-          >
-            Cart :<CartHeader />
-          </span>
-          <span
-            style={{ border: "2px solid gray", padding: "5px",fontWeight:"bolder" }}
-          >
-            WishList :<WishListHeader />
-          </span>
+          <NavLink to="cart">
+            <span>
+              <ion-icon name="cart" style={{fontSize:"2rem"}}></ion-icon>
+              <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem",display:"flex-end"}}><CartHeader /></span>
+            </span>
+          </NavLink>
+          <NavLink to="wishlist">
+            <span>
+              <ion-icon name="heart" style={{fontSize:"2rem"}}></ion-icon>
+              <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem"}}><WishListHeader /></span>
+            </span>
+          </NavLink>
         </nav>
     </div>
   );

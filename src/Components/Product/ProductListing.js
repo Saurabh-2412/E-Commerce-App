@@ -1,13 +1,14 @@
-import { data } from "../data";
+import { data } from "../../Data/data";
 import { useState, useReducer, useEffect } from "react";
-import { useCart } from "../Contexter/CartContext";
-import { useWishList } from "../Contexter/CartContext";
+import { useCart } from "../../Contexter/CartContext";
+import { useWishList } from "../../Contexter/WishListContext";
 //import { useBttnCart } from "../Cart/CartContext";
 
 export function ProductListing() {
   // var [cartList, setCartList] = useState([]);
   const { ItemsInCart, SetItemsInCart } = useCart([]);
   const { ItemsInWishList, SetItemsInWishList } = useWishList([]);
+  const [accordian,setAccordian] = useState("none");
 
   function onClickHandler(item) {
     //SetBttnText("Go to cart");
@@ -120,10 +121,22 @@ export function ProductListing() {
     showInventoryAll
   });
 
+  function accordianViewer(){
+    if(accordian === "block"){
+      setAccordian("none")
+    } else {
+      setAccordian("block")
+    }
+  }
+
   return (
+
     <div>
       <div>
-        <fieldset>
+        <button class="accordion" onClick={accordianViewer}>
+          <ion-icon name="filter" style={{fontSize:"2rem",marginRight:"8px"}}></ion-icon>
+        </button>
+        <fieldset className="panel" style={{display:accordian}}>
           <legend>Sort By</legend>
           <label>
             <input
@@ -148,7 +161,7 @@ export function ProductListing() {
             Price - Low to High
           </label>
         </fieldset>
-        <fieldset style={{ marginTop: "1rem" }}>
+        <fieldset style={{ marginTop: "1rem",display:accordian}} className="panel">
           <legend> Filters </legend>
           <label>
             <input
@@ -170,42 +183,34 @@ export function ProductListing() {
         </fieldset>
 
         <h1>Products Listing</h1>
-        {filteredData.map(function (item) {
-          return (
-            <li key={item.id}>
-              <img src={item.image} alt={item.image} />
-              <br />
-              <br />
-              Name : {item.name}
-              <br />
-              Avalibility :{item.inStock && <span> In Stock </span>}
-              {!item.inStock && <span> Out of Stock </span>}
-              <br />
-              {item.fastDelivery ? (
-                <div> Fast Delivery </div>
-              ) : (
-                <div> 4 days minimum </div>
-              )}
-              <br />
-              Price : {item.price}
-              <br />
-              {/*Brand : {item.brand}
-            <br />
-            Ratings : {item.ratings}
-            <br />
-            Offer : {item.offer}
-            <br /> 
-              <br />*/}
-              <br />
-              <button onClick={() => onClickHandler(item)}>Add to cart</button>
-              <br />
-              <br />
-              <button onClick={() => onWishListClickHandler(item)}>
-                Add to WishList
-              </button>
-            </li>
-          );
-        })}
+        <ul className="ProductList">
+            {filteredData.map(function (item) {
+              return (
+                <li key={item.id}>
+                  <img src={item.image} alt={item.image} />
+                  <br />
+                  Name : {item.name}<br />
+                  Price : {item.price}
+                  <br />
+                  Avalibility :{item.inStock && <span> In Stock </span>}
+                  {!item.inStock && <span> Out of Stock </span>}
+                  <br />
+                  {item.fastDelivery ? (
+                    <div> Fast Delivery </div>
+                  ) : (
+                    <div> 4 days minimum </div>
+                  )}
+                  <br/>
+                  <button onClick={() => onClickHandler(item)}>Add to cart</button>
+                  <br />
+                  <br />
+                  <button onClick={() => onWishListClickHandler(item)}>
+                    Add to WishList
+                  </button>
+                </li>
+              );
+            })}
+        </ul>
       </div>
     </div>
   );

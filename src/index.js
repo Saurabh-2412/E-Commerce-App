@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import './index.css';
 import App from './App';
 import { CartProvider } from "./Contexter/CartContext";
-import { WishListProvider } from "./Contexter/CartContext";
+import { WishListProvider } from "./Contexter/WishListContext";
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
