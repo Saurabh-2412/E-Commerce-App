@@ -1,0 +1,85 @@
+@import url("https://ui-component-lib.netlify.app/style.css");
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.App > button {
+  background-color: gray;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}
+
+img {
+  width: 50%;
+  height: auto;
+}
+
+.CartList {
+  padding: 0px;
+  list-style-type: none;
+  display: inline-block;
+  margin: 0px;
+}
+
+li {
+  list-style-type: none;
+  width: 20rem;
+  height: auto;
+  display: inline-block;
+  border: 2px solid gray;
+  padding: 2rem 0rem;
+}
+
+li > button {
+  background-color: gray;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 2px solid gray;
+}
+
+.nav-bttn {
+  margin: 0px 15px;
+  padding: 5px;
+  background-color: gray;
+  color: white;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
