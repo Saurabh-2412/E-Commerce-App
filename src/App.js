@@ -12,18 +12,7 @@ import {Routes, Route} from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <h1>E-Commerce</h1>
       <NavBar />
-      <span
-        style={{ float: "right", border: "2px solid gray", padding: "5px" }}
-      >
-        Cart :<CartHeader />
-      </span>
-      <span
-        style={{ float: "right", border: "2px solid gray", padding: "5px" }}
-      >
-        WishList :<WishListHeader />
-      </span>
       <br />
       <br />
       <Routes>

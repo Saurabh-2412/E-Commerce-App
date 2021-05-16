@@ -1,5 +1,7 @@
 import { NavLink }  from "react-router-dom";
 import React,{useState} from "react";
+import { CartHeader } from "./Cart/CartList";
+import { WishListHeader } from "./WishList/WishList";
 
 function NavBar() {
 
@@ -27,10 +29,20 @@ function NavBar() {
         </nav>
         <nav className="navigation">
           <span
-            style={{ fontSize: "30px", cursor: "pointer" }}
+            style={{ fontSize: "30px", cursor: "pointer",marginRight:"80rem" }}
             onClick={toggleNav}
           >
             &#9776;
+          </span>
+          <span
+            style={{ border: "2px solid gray", padding: "5px", marginRight:".8rem",fontWeight:"bolder" }}
+          >
+            Cart :<CartHeader />
+          </span>
+          <span
+            style={{ border: "2px solid gray", padding: "5px",fontWeight:"bolder" }}
+          >
+            WishList :<WishListHeader />
           </span>
         </nav>
     </div>
