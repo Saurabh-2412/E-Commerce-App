@@ -97,6 +97,23 @@ img {
   border-radius: 5px;
   border: 2px solid gray;
 }
+/* fontSize:"2rem",position:"absolute",color:wishlistCardColor,margin:"1rem 12rem",background:"center" */
+.ProductList li .icon-bttn{
+  font-size:x-large;
+  background:center;
+  position:absolute;
+  margin:1rem 16.8rem;
+  border: none;
+}
+
+.ProductList li img .cartAndwishList-icon{
+  position: absolute;
+  top: 1rem;
+  left: 18rem;
+  width: 2rem;
+  cursor: pointer;
+  z-index: 10;
+}
 
 .horizontal{
   display: flex;
@@ -135,20 +152,23 @@ img {
   text-align: left;
   outline: none;
   font-size: 15px;
-  transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s;
+  /* transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s; */
+  transition: cubic-bezier(1, 0.67, 0, 0.35) 2.5s;
+
   text-align: right;
 }
 
-.active, .accordion:hover {
+/* .active, .accordion:hover {
   background-color: #ccc; 
-}
+} */
 
 .panel {
   padding: 10px;
   display: none;
   background-color: white;
   overflow: hidden;
-  transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s;
+  /* transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s; */
+  transition: cubic-bezier(1, 0.67, 0, 0.35) 2.5s;
 }
 
 @keyframes App-logo-spin {

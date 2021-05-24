@@ -1,17 +1,23 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useReducer } from "react";
+import { cartReducer } from "../Reducer/CartReducer";
+//import { wishListReducer } from "../Reducer/WishListReducer";
 
-//Cart
 export const CartContext = createContext();
+
+const initialState = {
+  cartList: []
+};
+
 export function CartProvider({ children }) {
-  const [ItemsInCart, SetItemsInCart] = useState([]);
+  const [state, dispatchCart] = useReducer(cartReducer, initialState);
 
   return (
-    <CartContext.Provider value={{ ItemsInCart, SetItemsInCart }}>
+    <CartContext.Provider value={{ ...state, dispatchCart }}>
       {children}
     </CartContext.Provider>
   );
 }
 
-export function useCart() {
+export function useCartList() {
   return useContext(CartContext);
 }

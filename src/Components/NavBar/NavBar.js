@@ -5,28 +5,29 @@ import { WishListHeader } from "../WishList/WishList";
 
 function NavBar() {
 
-    const [winWidth, setWinWidth] = useState("0%");
+  const [winWidth, setWinWidth] = useState("0%");
 
-    function toggleNav() {
-        if (winWidth === "0%") {
-        setWinWidth("100%");
-        } else {
-        setWinWidth("0%");
-        }
+  function toggleNav() {
+    if (winWidth === "0%") {
+    setWinWidth("100%");
+    } else {
+    setWinWidth("0%");
     }
+  }
 
   return (
     <div>
         <nav>
             <div style={{ width: winWidth }} className="overlay">
-                <button className="closebtn" onClick={toggleNav}></button>
-                <div class="overlay-content">
-                <NavLink to="/" onClick={toggleNav}>Product</NavLink> {" "}
-                <NavLink to="cart" onClick={toggleNav}>Cart</NavLink> {" "}
+              <button className="closebtn" onClick={toggleNav}></button>
+              <div className="overlay-content">
+                <NavLink to="/" style={{backgroundColor:"none"}} onClick={toggleNav}>Product</NavLink> {" "}
+                <NavLink to="cartlist" onClick={toggleNav}>Cart</NavLink> {" "}
                 <NavLink to="wishlist" onClick={toggleNav}>Wishlist</NavLink>
-                </div>
+              </div>
             </div>
         </nav>
+
         <nav className="navigation">
           <span
             style={{ fontSize: "30px", cursor: "pointer" }}
@@ -34,7 +35,7 @@ function NavBar() {
           >
             &#9776;
           </span>
-          <NavLink to="cart">
+          <NavLink to="cartlist">
             <span>
               <ion-icon name="cart" style={{fontSize:"2rem"}}></ion-icon>
               <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem",display:"flex-end"}}><CartHeader /></span>

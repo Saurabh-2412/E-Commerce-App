@@ -1,14 +1,17 @@
-import { createContext, useContext, useState } from "react";
-
-//WishList
+import { createContext, useContext, useReducer } from "react";
+import { wishListReducer } from "../Reducer/WishListReducer";
 
 export const WishListContext = createContext();
 
+const initialState = {
+  wishList: []
+};
+
 export function WishListProvider({ children }) {
-  const [ItemsInWishList, SetItemsInWishList] = useState([]);
+  const [state, dispatchWishList] = useReducer(wishListReducer, initialState);
 
   return (
-    <WishListContext.Provider value={{ ItemsInWishList, SetItemsInWishList }}>
+    <WishListContext.Provider value={{ ...state, dispatchWishList }}>
       {children}
     </WishListContext.Provider>
   );

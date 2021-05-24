@@ -1,65 +1,51 @@
 import { data } from "../../Data/data";
+import React from "react";
+import axios from "axios";
 import { useState, useReducer, useEffect } from "react";
-import { useCart } from "../../Contexter/CartContext";
+
+import { useProduct } from "../../Contexter/ProductContext";
+import { useCartList } from "../../Contexter/CartContext";
 import { useWishList } from "../../Contexter/WishListContext";
-//import { useBttnCart } from "../Cart/CartContext";
+//import {FilteredData} from "./FilteredData"
 
 export function ProductListing() {
-  // var [cartList, setCartList] = useState([]);
-  const { ItemsInCart, SetItemsInCart } = useCart([]);
-  const { ItemsInWishList, SetItemsInWishList } = useWishList([]);
+  const { ItemsInProduct, SetItemsInProduct } = useProduct();
+  const { cartList, dispatchCart } = useCartList();
+  const { wishList, dispatchWishList } = useWishList();
   const [accordian,setAccordian] = useState("none");
+  const [cartColor,setCartColor] = useState("white");
+  const [wishListColor, setWishListColor] = useState("white");
 
-  function onClickHandler(item) {
-    //SetBttnText("Go to cart");
-    if (ItemsInCart.some((e) => e.id === item.id)) {
-      SetItemsInCart((itincart) =>
-        itincart.map((it) => {
-          if (it.id === item.id) {
-            return { ...it, quantity: it.quantity + 1 };
-          }
-          return it;
-        })
+  useEffect(() => {
+    (async function () {
+      const { data } = await axios.get(
+        "https://ecommercedata.saurabhsharma11.repl.co/v1/productData"
       );
+      SetItemsInProduct(data);
+    })();
+  });
+
+  function CartHandler(product) {
+    console.log("cart handler",product);
+    dispatchCart({ type: "Added", payload: product});
+    CartColorHandler(product);
+  }
+
+  function WishListHandler(product) {
+    console.log(product);
+    dispatchWishList({ type: "Added", payload: product});
+  }
+
+  function CartColorHandler(product){
+    console.log("cart color handler",product);
+    if(cartList.find((item) => (item.id === product.id))){
+      setCartColor("orange");
     } else {
-      SetItemsInCart((cartItems) => [...cartItems, { ...item, quantity: 1 }]);
+      setCartColor("white");
     }
   }
 
-  useEffect(() => {
-    // setCurrentList(JSON.parse(localStorage.getItem(wishList)));
-    const savingItem = localStorage.setItem(
-      "ItemsInCart",
-      JSON.stringify(ItemsInCart)
-    );
-    console.log("data saved..." + savingItem);
-  });
-
-  function onWishListClickHandler(item) {
-    console.log("WishList", item);
-    const newItem = ItemsInWishList.find((e) => e.id === item.id);
-    if (newItem) {
-      SetItemsInWishList((itincart) =>
-        itincart.map((it) => {
-          if (it.id === item.id) {
-            return { ...it };
-          }
-          return it;
-        })
-      );
-    } else {
-      SetItemsInWishList((WishListItems) => [...WishListItems, { ...item }]);
-    }
-  }
-  useEffect(() => {
-    // setCurrentList(JSON.parse(localStorage.getItem(wishList)));
-    const savingItem = localStorage.setItem(
-      "ItemsInWishList",
-      JSON.stringify(ItemsInWishList)
-    );
-    console.log("data saved..." + savingItem);
-  });
-
+  //filtering data
   const [
     { showInventoryAll, showFastDeliveryOnly, sortBy },
     dispatch
@@ -115,7 +101,7 @@ export function ProductListing() {
       .filter(({ inStock }) => (showInventoryAll ? true : inStock));
   }
 
-  const sortedData = getSortedData(data, sortBy);
+  const sortedData = getSortedData(ItemsInProduct, sortBy);//data
   const filteredData = getFilteredData(sortedData, {
     showFastDeliveryOnly,
     showInventoryAll
@@ -133,80 +119,87 @@ export function ProductListing() {
 
     <div>
       <div>
-        <button class="accordion" onClick={accordianViewer}>
+        <button className="accordion" onClick={accordianViewer}>
           <ion-icon name="filter" style={{fontSize:"2rem",marginRight:"8px"}}></ion-icon>
         </button>
         <fieldset className="panel" style={{display:accordian}}>
-          <legend>Sort By</legend>
-          <label>
-            <input
-              type="radio"
-              name="sort"
-              onChange={() =>
-                dispatch({ type: "SORT", payload: "PRICE_HIGH_TO_LOW" })
-              }
-              checked={sortBy && sortBy === "PRICE_HIGH_TO_LOW"}
-            ></input>{" "}
-            Price - High to Low
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="sort"
-              onChange={() =>
-                dispatch({ type: "SORT", payload: "PRICE_LOW_TO_HIGH" })
-              }
-              checked={sortBy && sortBy === "PRICE_LOW_TO_HIGH"}
-            ></input>{" "}
-            Price - Low to High
-          </label>
-        </fieldset>
+        <legend>Sort By</legend>
+        <label>
+          <input
+            type="radio"
+            name="sort"
+            onChange={() =>
+              dispatch({ type: "SORT", payload: "PRICE_HIGH_TO_LOW" })
+            }
+            checked={sortBy && sortBy === "PRICE_HIGH_TO_LOW"}
+          ></input>{" "}
+          Price - High to Low
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="sort"
+            onChange={() =>
+              dispatch({ type: "SORT", payload: "PRICE_LOW_TO_HIGH" })
+            }
+            checked={sortBy && sortBy === "PRICE_LOW_TO_HIGH"}
+          ></input>{" "}
+          Price - Low to High
+        </label>
+      </fieldset>
         <fieldset style={{ marginTop: "1rem",display:accordian}} className="panel">
-          <legend> Filters </legend>
-          <label>
-            <input
-              type="checkbox"
-              checked={showInventoryAll}
-              onChange={() => dispatch({ type: "TOGGLE_INVENTORY" })}
-            />
-            Include Out of Stock
-          </label>
+        <legend> Filters </legend>
+        <label>
+          <input
+            type="checkbox"
+            checked={showInventoryAll}
+            onChange={() => dispatch({ type: "TOGGLE_INVENTORY" })}
+          />
+          Include Out of Stock
+        </label>
 
-          <label>
-            <input
-              type="checkbox"
-              checked={showFastDeliveryOnly}
-              onChange={() => dispatch({ type: "TOGGLE_DELIVERY" })}
-            />
-            Fast Delivery Only
-          </label>
-        </fieldset>
-
+        <label>
+          <input
+            type="checkbox"
+            checked={showFastDeliveryOnly}
+            onChange={() => dispatch({ type: "TOGGLE_DELIVERY" })}
+          />
+          Fast Delivery Only
+        </label>
+      </fieldset>
         <h1>Products Listing</h1>
         <ul className="ProductList">
-            {filteredData.map(function (item) {
+            {filteredData.map(function (product) {
               return (
-                <li key={item.id}>
-                  <img src={item.image} alt={item.image} />
+                <li key={product.id}>
+                  <button className="icon-bttn" style={{}} onClick={() => CartHandler(product)}>
+                    <ion-icon name="cart"></ion-icon>
+                  </button>
+                  <button className="icon-bttn" style={{margin:"1rem 14rem"}} onClick={() => WishListHandler(product)}>
+                    <ion-icon name="heart"></ion-icon>
+                  </button>
+                  <img src={product.image} alt={product.image} />
                   <br />
-                  Name : {item.name}<br />
-                  Price : {item.price}
+                  Name : {product.name}<br />
+                  Price : {product.price}
                   <br />
-                  Avalibility :{item.inStock && <span> In Stock </span>}
-                  {!item.inStock && <span> Out of Stock </span>}
+                  Avalibility :{product.inStock && <span> In Stock </span>}
+                  {!product.inStock && <span> Out of Stock </span>}
                   <br />
-                  {item.fastDelivery ? (
+                  {product.fastDelivery ? (
                     <div> Fast Delivery </div>
                   ) : (
                     <div> 4 days minimum </div>
                   )}
-                  <br/>
-                  <button onClick={() => onClickHandler(item)}>Add to cart</button>
-                  <br />
-                  <br />
-                  <button onClick={() => onWishListClickHandler(item)}>
-                    Add to WishList
-                  </button>
+                  {/** 
+                    <br/>
+                    <button onClick={() => CartHandler(product)}>Add to cart</button>
+                    <br />
+                    <br />
+                    <button onClick={() => WishListHandler(product)}>
+                      Add to WishList
+                    </button>
+                  */}
                 </li>
               );
             })}
