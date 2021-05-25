@@ -10,12 +10,16 @@ export const cartReducer = (state, action) => {
           });
           return {
             ...state,
-            cartList: increasedQuantity
+            cartList: increasedQuantity,
+            displayCartModal: true,
+            cartModalContent: "Added to cart"
           };
         } else {
           return {
             ...state,
-            cartList: [...state.cartList, action.payload]
+            cartList: [...state.cartList, action.payload],
+            displayCartModal: true,
+            cartModalContent: "Added to cart"
           };
         }
   
@@ -28,7 +32,9 @@ export const cartReducer = (state, action) => {
         });
         return {
           ...state,
-          cartList: increasedQuantity
+          cartList: increasedQuantity,
+          displayCartModal: true,
+          cartModalContent: "Quantity Increased"
         };
   
       case "Decrement":
@@ -41,7 +47,9 @@ export const cartReducer = (state, action) => {
           });
           return {
             ...state,
-            cartList: decreasedQuantity
+            cartList: decreasedQuantity,
+            displayCartModal: true,
+            cartModalContent: "Quantity Decreased"
           };
         } else {
           const filteredCartList = state.cartList.filter(
@@ -49,7 +57,9 @@ export const cartReducer = (state, action) => {
           );
           return {
             ...state,
-            cartList: filteredCartList
+            cartList: filteredCartList,
+            displayCartModal: true,
+            cartModalContent: "Removed from cart"
           };
         }
   
@@ -59,9 +69,18 @@ export const cartReducer = (state, action) => {
         );
         return {
           ...state,
-          cartList: newCartList
+          cartList: newCartList,
+          displayCartModal: true,
+          cartModalContent: "Removed from cart"
         };
-  
+
+      case "DISPLAY_MODAL":
+        console.log("display modal from cart reducer")
+        return {
+          ...state,
+          displayCartModal: false,
+        };
+
       case "MoveToCart":
         if (state.cartList.some((item) => item.id === action.payload.id)) {
           const MovedItem = state.cartList.map((item) => {
@@ -71,12 +90,16 @@ export const cartReducer = (state, action) => {
           });
           return {
             ...state,
-            cartList: MovedItem
+            cartList: MovedItem,
+            displayCartModal: true,
+            cartModalContent: "Moved to cart"
           };
         } else {
           return {
             ...state,
-            cartList: [...state.cartList, action.payload]
+            cartList: [...state.cartList, action.payload],
+            displayCartModal: true,
+            cartModalContent: "Moved to cart"
           };
         }
       default:

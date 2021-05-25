@@ -1,12 +1,30 @@
 import { createContext, useContext, useState } from "react";
+import { useReducer, useEffect } from "react";
+import {productReducer} from "../Reducer/productReducer"
 
 export const ProductContext = createContext();
 
+const initialState = {
+  products: [],
+  cartItems: [],
+  wishItems: [],
+  displayModal: false,
+  modalContent: "",
+  loader: false
+};
+
 export function ProductProvider({ children }) {
-  const [ItemsInProduct, SetItemsInProduct] = useState([]);
+  const [state, dispatchProduct] = useReducer(productReducer, initialState);
+
+  useEffect(() => {
+    setTimeout(() => dispatchProduct({ type: "DISPLAY_MODAL" }), 3000);
+    return () => {
+      clearTimeout();
+    };
+  }, [state.displayModal]);
 
   return (
-    <ProductContext.Provider value={{ ItemsInProduct, SetItemsInProduct }}>
+    <ProductContext.Provider value={{ ...state, dispatchProduct }}>
       {children}
     </ProductContext.Provider>
   );

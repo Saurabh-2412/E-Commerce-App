@@ -52,6 +52,16 @@ img {
   margin: 0px;
 }
 
+.CartList .NavLink span{
+  color:orange;
+  font-weight:bolder;
+  border:2px solid gray;
+  padding:10px;
+  background-color:#41464b;
+  border-radius:5px;
+  font-size:2.5rem
+}
+
 .CartList li {
   list-style-type: none;
   height: auto;
@@ -86,7 +96,7 @@ img {
 
 .ProductList li img{
   width: 100%;
-  height: auto;
+  height: 13rem;
 }
 
 .ProductList li > button {
@@ -169,6 +179,34 @@ img {
   overflow: hidden;
   /* transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s; */
   transition: cubic-bezier(1, 0.67, 0, 0.35) 2.5s;
+}
+.snackbar {
+  display: flex;
+  height: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: gray;
+  font-weight: bold;
+  color: orange;
+  border-radius: 8px;
+  font-size: x-large;
+  z-index: 1;
+}
+
+.snackbar--messege {
+  letter-spacing: 0.2rem;
+}
+
+.snackbar--button {
+  background-color: gray;
+  color: orange;
+  border: none;
+  cursor: pointer;
+}
+
+.card-body .card-text p{
+  margin: 10px;
 }
 
 @keyframes App-logo-spin {

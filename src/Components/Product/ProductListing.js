@@ -8,13 +8,22 @@ import { useCartList } from "../../Contexter/CartContext";
 import { useWishList } from "../../Contexter/WishListContext";
 //import {FilteredData} from "./FilteredData"
 
-export function ProductListing() {
-  const { ItemsInProduct, SetItemsInProduct } = useProduct();
+export const ProductListing = ({}) => {
+  //const { ItemsInProduct, SetItemsInProduct } = useProduct();
+  const [ ItemsInProduct, SetItemsInProduct ] = useState([]);
+  const {
+    products,
+    cartItems,
+    wishItems,
+    dispatchProduct
+  } = useProduct();
+
   const { cartList, dispatchCart } = useCartList();
   const { wishList, dispatchWishList } = useWishList();
   const [accordian,setAccordian] = useState("none");
   const [cartColor,setCartColor] = useState("white");
   const [wishListColor, setWishListColor] = useState("white");
+
 
   useEffect(() => {
     (async function () {
@@ -22,27 +31,24 @@ export function ProductListing() {
         "https://ecommercedata.saurabhsharma11.repl.co/v1/productData"
       );
       SetItemsInProduct(data);
+      //products = data;
     })();
   });
 
   function CartHandler(product) {
     console.log("cart handler",product);
-    dispatchCart({ type: "Added", payload: product});
-    CartColorHandler(product);
+    if(cartList.some((item) => (item.id === product.id))){
+      dispatchCart({ type: "Remove", payload: product});
+    } else {
+      dispatchCart({ type: "Added", payload: product});
+    }
+    //dispatchProduct({ type:"Added_to_cart", payload: product});
   }
 
   function WishListHandler(product) {
     console.log(product);
     dispatchWishList({ type: "Added", payload: product});
-  }
-
-  function CartColorHandler(product){
-    console.log("cart color handler",product);
-    if(cartList.find((item) => (item.id === product.id))){
-      setCartColor("orange");
-    } else {
-      setCartColor("white");
-    }
+    dispatchProduct({type:"Added to wish", payload: product});
   }
 
   //filtering data
@@ -116,59 +122,59 @@ export function ProductListing() {
   }
 
   return (
-
     <div>
-      <div>
-        <button className="accordion" onClick={accordianViewer}>
-          <ion-icon name="filter" style={{fontSize:"2rem",marginRight:"8px"}}></ion-icon>
-        </button>
-        <fieldset className="panel" style={{display:accordian}}>
-        <legend>Sort By</legend>
-        <label>
-          <input
-            type="radio"
-            name="sort"
-            onChange={() =>
-              dispatch({ type: "SORT", payload: "PRICE_HIGH_TO_LOW" })
-            }
-            checked={sortBy && sortBy === "PRICE_HIGH_TO_LOW"}
-          ></input>{" "}
-          Price - High to Low
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="sort"
-            onChange={() =>
-              dispatch({ type: "SORT", payload: "PRICE_LOW_TO_HIGH" })
-            }
-            checked={sortBy && sortBy === "PRICE_LOW_TO_HIGH"}
-          ></input>{" "}
-          Price - Low to High
-        </label>
-      </fieldset>
-        <fieldset style={{ marginTop: "1rem",display:accordian}} className="panel">
-        <legend> Filters </legend>
-        <label>
-          <input
-            type="checkbox"
-            checked={showInventoryAll}
-            onChange={() => dispatch({ type: "TOGGLE_INVENTORY" })}
-          />
-          Include Out of Stock
-        </label>
-
-        <label>
-          <input
-            type="checkbox"
-            checked={showFastDeliveryOnly}
-            onChange={() => dispatch({ type: "TOGGLE_DELIVERY" })}
-          />
-          Fast Delivery Only
-        </label>
-      </fieldset>
-        <h1>Products Listing</h1>
-        <ul className="ProductList">
+        <div>
+          <button className="accordion" onClick={accordianViewer}>
+            <ion-icon name="filter" style={{fontSize:"2rem",marginRight:"8px"}}></ion-icon>
+          </button>
+          <fieldset className="panel" style={{display:accordian}}>
+            <legend>Sort By</legend>
+            <label>
+              <input
+                type="radio"
+                name="sort"
+                onChange={() =>
+                  dispatch({ type: "SORT", payload: "PRICE_HIGH_TO_LOW" })
+                }
+                checked={sortBy && sortBy === "PRICE_HIGH_TO_LOW"}
+              ></input>{" "}
+              Price - High to Low
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="sort"
+                onChange={() =>
+                  dispatch({ type: "SORT", payload: "PRICE_LOW_TO_HIGH" })
+                }
+                checked={sortBy && sortBy === "PRICE_LOW_TO_HIGH"}
+              ></input>{" "}
+              Price - Low to High
+            </label>
+          </fieldset>
+          <fieldset style={{ marginTop: "1rem",display:accordian}} className="panel">
+            <legend> Filters </legend>
+            <label>
+              <input
+                type="checkbox"
+                checked={showInventoryAll}
+                onChange={() => dispatch({ type: "TOGGLE_INVENTORY" })}
+              />
+              Include Out of Stock
+            </label>
+  
+            <label>
+              <input
+                type="checkbox"
+                checked={showFastDeliveryOnly}
+                onChange={() => dispatch({ type: "TOGGLE_DELIVERY" })}
+              />
+              Fast Delivery Only
+            </label>
+          </fieldset>
+          
+          <h1>Products Listing</h1>
+          <ul className="ProductList">
             {filteredData.map(function (product) {
               return (
                 <li key={product.id}>
@@ -191,20 +197,11 @@ export function ProductListing() {
                   ) : (
                     <div> 4 days minimum </div>
                   )}
-                  {/** 
-                    <br/>
-                    <button onClick={() => CartHandler(product)}>Add to cart</button>
-                    <br />
-                    <br />
-                    <button onClick={() => WishListHandler(product)}>
-                      Add to WishList
-                    </button>
-                  */}
                 </li>
               );
             })}
-        </ul>
-      </div>
+          </ul>
+        </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { useState, useReducer, useEffect } from "react";
 import { useProduct } from "../../Contexter/ProductContext";
 import { useCartList } from "../../Contexter/CartContext";
 import { useWishList } from "../../Contexter/WishListContext";
+import ProductListing from "./ProductListing"
 
 export function FilteredData(){
     const { ItemsInProduct, SetItemsInProduct } = useProduct();
@@ -18,7 +19,7 @@ export function FilteredData(){
           );
           SetItemsInProduct(data);
         })();
-      });
+      },[]);
 
     //filtering data
     const [
@@ -90,7 +91,6 @@ export function FilteredData(){
         }
     }
 
-
     return (
         <div>
             <button className="accordion" onClick={accordianViewer}>
@@ -141,6 +141,7 @@ export function FilteredData(){
               Fast Delivery Only
             </label>
           </fieldset>
-        </div>
+            <ProductListing filteredData={filteredData}/>
+          </div>
     )
 }

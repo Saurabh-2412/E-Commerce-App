@@ -2,6 +2,7 @@ import { NavLink }  from "react-router-dom";
 import React,{useState} from "react";
 import { CartHeader } from "../Cart/CartList";
 import { WishListHeader } from "../WishList/WishList";
+import {Modal} from "../Modal"
 
 function NavBar() {
 
@@ -35,6 +36,12 @@ function NavBar() {
           >
             &#9776;
           </span>
+          <NavLink to="home">
+            <span>
+              <ion-icon name="home" style={{fontSize:"2rem"}}></ion-icon>
+              <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem"}}></span>
+            </span>
+          </NavLink>
           <NavLink to="cartlist">
             <span>
               <ion-icon name="cart" style={{fontSize:"2rem"}}></ion-icon>

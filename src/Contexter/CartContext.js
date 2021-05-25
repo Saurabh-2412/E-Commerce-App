@@ -1,15 +1,24 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
 import { cartReducer } from "../Reducer/CartReducer";
-//import { wishListReducer } from "../Reducer/WishListReducer";
 
 export const CartContext = createContext();
 
 const initialState = {
-  cartList: []
+  cartList: [],
+  displayCartModal: false,
+  cartModalContent: "",
+  loader: false
 };
 
 export function CartProvider({ children }) {
   const [state, dispatchCart] = useReducer(cartReducer, initialState);
+
+  useEffect(() => {
+    setTimeout(() => dispatchCart({ type: "DISPLAY_MODAL" }), 3000);
+    return () => {
+      clearTimeout();
+    };
+  }, [state.displayCartModal]);
 
   return (
     <CartContext.Provider value={{ ...state, dispatchCart }}>

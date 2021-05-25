@@ -7,12 +7,16 @@ export const wishListReducer = (state, action) => {
         if (AddedProduct) {
           return {
             ...state,
-            wiishList: [...state.wishList]
+            wiishList: [...state.wishList],
+            displayWishlistModal: true,
+            wishlistModalContent: "Added to wishlist"
           };
         } else {
           return {
             ...state,
-            wishList: [...state.wishList, action.payload]
+            wishList: [...state.wishList, action.payload],
+            displayWishlistModal: true,
+            wishlistModalContent: "Added to wishlist"
           };
         }
   
@@ -22,7 +26,9 @@ export const wishListReducer = (state, action) => {
         );
         return {
           ...state,
-          wishList: newWishList
+          wishList: newWishList,
+          displayWishlistModal: true,
+          wishlistModalContent: "Removed from wishlist"
         };
   
       case "MoveToCart":
@@ -31,7 +37,9 @@ export const wishListReducer = (state, action) => {
         );
         return {
           ...state,
-          wishList: newWishListItem
+          wishList: newWishListItem,
+          displayWishlistModal: true,
+          wishlistModalContent: "Moved to cart"
         };
       default:
     }
