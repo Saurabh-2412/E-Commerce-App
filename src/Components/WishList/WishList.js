@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect} from "react";
+import axios from "axios"
 import { useWishList } from "../../Contexter/WishListContext";
 import { useCartList } from "../../Contexter/CartContext";
 import { NavLink }  from "react-router-dom";
@@ -14,15 +15,87 @@ export function WishList() {
   const { wishList, dispatchWishList } = useWishList();
   const { cartList, dispatchCart } = useCartList();
 
-  function MoveTOCartHandler(product) {
-    console.log("moved to cart", product);
-    dispatchWishList({ type: "MoveToCart", payload: product });
-    dispatchCart({ type: "MoveToCart", payload: product });
+  //getting wish list data
+  useEffect(() => {
+    (async function () {
+      const { data } = await axios.get(
+        "https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData"
+      );
+      dispatchWishList({ type: "Loading", payload: data.WishlistProduct })
+    })();
+  },[]);
+
+  async function WishListHandler(product){
+    if(!cartList.some((item) => item.id === product.id)){
+      //adding to cart list
+      try {
+        const {data} = await axios.post(
+          "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
+          { product }
+        );
+        dispatchCart({ type: "Added", payload: data.cart});
+      } catch (err) {
+        console.log(err);
+      }
+      //removing from wishlist
+      try{
+        const productId = product._id;
+        const { data } = await axios.delete("https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
+        { data:{"productId":productId}});
+        //console.log("deleted prod", data.wishProduct);
+        dispatchWishList({ type: "Remove", payload: data.wishProduct })
+      }
+      catch(err){
+        console.log(err);
+      }
+
+    } else {
+      //increasing quantity
+      const productId = product._id;
+      const quantity = product.quantity + 1;
+      try{
+        const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
+        { "productId": productId, "quantity":quantity})
+        //console.log("resp from server quantity", data)
+        dispatchCart({ type: "Increment", payload: product });
+      }
+      catch(err){
+        console.log(err);
+      }
+      //removing from wishlist
+      try{
+        const productId = product._id;
+        const { data } = await axios.delete("https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
+        { data:{"productId":productId}});
+        //console.log("deleted prod", data.wishProduct);
+        dispatchWishList({ type: "Remove", payload: data.wishProduct })
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+    //dispatchWishList({ type: "MoveToCart", payload: product });
+    //dispatchCart({ type: "MoveToCart", payload: product });
+  }
+
+  //removing data from wishlist server
+  async function Remove(product){
+    try{
+      const productId = product._id;
+      const { data } = await axios.delete("https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
+      { data:{"productId":productId}});
+      //console.log("deleted prod", data.wishProduct);
+      dispatchWishList({ type: "Remove", payload: data.wishProduct })
+    }
+    catch(err){
+      console.log(err);
+    }
   }
 
   return (
     <>
       <ul className="CartList">
+      <h1 style={{color:"orange",border:"2px solid gray",borderRadius:"5px"}}>Your wishlist collection</h1>
         {wishList.length > 0 ? (
           wishList.map((product) => (
             <li key={product.id}>
@@ -34,8 +107,12 @@ export function WishList() {
                       <p>Price : {product.price}</p>
                       <p>IdealFor : {product.idealFor}</p>
                       <p>Color : {product.color}</p>
-                      <button className="btn btn-secondary btn-sm" onClick={() => dispatchWishList({ type: "Remove", payload: product })}>Remove</button>
-                      <button className="btn btn-secondary btn-sm" onClick={() => MoveTOCartHandler(product)}>Move to cart</button>
+                      <p>Offer : {product.offer}</p>
+                      <p>Material : {product.material}</p>
+                      <p>Brand : {product.brand}</p>
+                      <p>Ratings : {product.ratings}</p>
+                      <button className="btn btn-secondary btn-sm" onClick={() => Remove(product)}>Remove</button>
+                      <button className="btn btn-secondary btn-sm" onClick={() => WishListHandler(product)}>Move to cart</button>
                   </div>
                 </div>
               </div>

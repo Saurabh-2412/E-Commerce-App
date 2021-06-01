@@ -13,12 +13,12 @@ const initialState = {
 export function WishListProvider({ children }) {
   const [state, dispatchWishList] = useReducer(wishListReducer, initialState);
 
-/*   useEffect(() => {
+  useEffect(() => {
     setTimeout(() => dispatchWishList({ type: "DISPLAY_MODAL" }), 3000);
     return () => {
       clearTimeout();
     };
-  }, [state.displayWishlistModal]); */
+  },[state.displayWishlistModal]);
 
   return (
     <WishListContext.Provider value={{ ...state, dispatchWishList }}>

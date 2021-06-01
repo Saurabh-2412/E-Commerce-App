@@ -1,6 +1,6 @@
 import { NavLink }  from "react-router-dom";
 import React,{useState} from "react";
-import { CartHeader } from "../Cart/CartList";
+import { CartHeader } from "../PrivatePage/Cart/CartList";
 import { WishListHeader } from "../WishList/WishList";
 import {Modal} from "../Modal"
 
@@ -53,6 +53,15 @@ function NavBar() {
               <ion-icon name="heart" style={{fontSize:"2rem"}}></ion-icon>
               <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem"}}><WishListHeader /></span>
             </span>
+          </NavLink>
+          {/** for user */}
+          <NavLink to="address">
+              <ion-icon name="person" style={{fontSize: "1.8rem",border:"3px solid gray",borderRadius: "53px"}}></ion-icon>
+              <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem"}}></span>
+          </NavLink>
+          <NavLink to="login">
+              <ion-icon name="person" style={{fontSize: "1.8rem",border:"3px solid gray",borderRadius: "53px"}}></ion-icon>
+              <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem"}}></span>
           </NavLink>
         </nav>
     </div>

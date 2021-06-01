@@ -2,14 +2,13 @@ import { data } from "../../Data/data";
 import React from "react";
 import axios from "axios";
 import { useState, useReducer, useEffect } from "react";
-
 import { useProduct } from "../../Contexter/ProductContext";
 import { useCartList } from "../../Contexter/CartContext";
 import { useWishList } from "../../Contexter/WishListContext";
-//import {FilteredData} from "./FilteredData"
+import { useAuth } from "../../Contexter/AuthContext"
 
 export const ProductListing = ({}) => {
-  //const { ItemsInProduct, SetItemsInProduct } = useProduct();
+  const {isUserLoggedIn, setIsUserLoggedIn} = useAuth();
   const [ ItemsInProduct, SetItemsInProduct ] = useState([]);
   const {
     products,
@@ -21,9 +20,8 @@ export const ProductListing = ({}) => {
   const { cartList, dispatchCart } = useCartList();
   const { wishList, dispatchWishList } = useWishList();
   const [accordian,setAccordian] = useState("none");
-  const [cartColor,setCartColor] = useState("white");
-  const [wishListColor, setWishListColor] = useState("white");
-
+  const [cartColor,setCartColor] = useState("active-icon-bttn");
+  const  token = JSON.parse(localStorage?.getItem("login"))
 
   useEffect(() => {
     (async function () {
@@ -31,24 +29,59 @@ export const ProductListing = ({}) => {
         "https://ecommercedata.saurabhsharma11.repl.co/v1/productData"
       );
       SetItemsInProduct(data);
-      //products = data;
+      //dispatchProduct({ type: "SET_INITIAL_DATA", payload: data});
     })();
-  });
+  },[]);
 
-  function CartHandler(product) {
-    console.log("cart handler",product);
-    if(cartList.some((item) => (item.id === product.id))){
-      dispatchCart({ type: "Remove", payload: product});
+  async function CartHandler(product) {
+    //console.log("this is for server ",product)
+    //console.log(isUserLoggedIn)
+    axios.interceptors.request.use(
+      config => {
+        config.headers.authorization = token;
+        return config;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    )
+    const productId = product._id;
+    if(!cartList.some((item) => item.id === product.id)){
+      try {
+        const {data} = await axios.post(
+          "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
+          { product }
+        );
+        dispatchCart({ type: "Added", payload: data.cart});
+      } catch (err) {
+        console.log(err);
+      }
     } else {
-      dispatchCart({ type: "Added", payload: product});
+      dispatchCart({ type: "AlreadyExist" });
     }
-    //dispatchProduct({ type:"Added_to_cart", payload: product});
   }
 
-  function WishListHandler(product) {
-    console.log(product);
-    dispatchWishList({ type: "Added", payload: product});
-    dispatchProduct({type:"Added to wish", payload: product});
+  async function WishListHandler(product) {
+    //console.log("wishlist handler",product);
+    if(!wishList.some((item) => item.id === product.id)){
+      try {
+        const {data} = await axios.post(
+          "https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
+          { product }
+        );
+        //console.log("data posted in wish server",data.wish);
+        if(wishList.some((item) => (item.id === product.id))){
+          dispatchWishList({ type: "Remove", payload: data.wish});
+        } else {
+          dispatchWishList({ type: "Added", payload: data.wish});
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      dispatchWishList({ type: "AlreadyExist" });
+    }
+    //dispatchProduct({type:"Added to wish", payload: product});
   }
 
   //filtering data
@@ -107,7 +140,7 @@ export const ProductListing = ({}) => {
       .filter(({ inStock }) => (showInventoryAll ? true : inStock));
   }
 
-  const sortedData = getSortedData(ItemsInProduct, sortBy);//data
+  const sortedData = getSortedData(ItemsInProduct, sortBy);//ItemsInProduct
   const filteredData = getFilteredData(sortedData, {
     showFastDeliveryOnly,
     showInventoryAll
@@ -178,25 +211,34 @@ export const ProductListing = ({}) => {
             {filteredData.map(function (product) {
               return (
                 <li key={product.id}>
-                  <button className="icon-bttn" style={{}} onClick={() => CartHandler(product)}>
-                    <ion-icon name="cart"></ion-icon>
-                  </button>
-                  <button className="icon-bttn" style={{margin:"1rem 14rem"}} onClick={() => WishListHandler(product)}>
-                    <ion-icon name="heart"></ion-icon>
-                  </button>
-                  <img src={product.image} alt={product.image} />
-                  <br />
-                  Name : {product.name}<br />
-                  Price : {product.price}
-                  <br />
-                  Avalibility :{product.inStock && <span> In Stock </span>}
-                  {!product.inStock && <span> Out of Stock </span>}
-                  <br />
-                  {product.fastDelivery ? (
-                    <div> Fast Delivery </div>
+                  {product.inStock ? (
+                    <>
+                      <button className="active icon-bttn" onClick={() => CartHandler(product)}>
+                        <ion-icon name="cart"></ion-icon>
+                      </button>
+                      <button className="active icon-bttn" style={{margin:"1rem 14rem"}} onClick={() => WishListHandler(product)}>
+                        <ion-icon name="heart"></ion-icon>
+                      </button>
+                    </>
                   ) : (
-                    <div> 4 days minimum </div>
+                    <>
+                      <button className="icon-bttn" onClick={() => CartHandler(product)} disabled></button>
+                      <button className="icon-bttn" onClick={() => WishListHandler(product)} disabled></button>
+                    </>
                   )}
+                      <img src={product.image} alt={product.image} />
+                      <br />
+                      Name : {product.name}<br />
+                      Price : {product.price}
+                      <br />
+                      Avalibility :{product.inStock && <span> In Stock </span>}
+                      {!product.inStock && <span> Out of Stock </span>}
+                      <br />
+                      {product.fastDelivery ? (
+                        <div> Fast Delivery </div>
+                      ) : (
+                        <div> 4 days minimum </div>
+                      )}
                 </li>
               );
             })}

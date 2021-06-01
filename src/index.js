@@ -7,18 +7,21 @@ import App from './App';
 import { ProductProvider } from "./Contexter/ProductContext";
 import { CartProvider } from "./Contexter/CartContext";
 import { WishListProvider } from "./Contexter/WishListContext";
+import { AuthProvider } from "./Contexter/AuthContext"
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-    <ProductProvider>
-      <CartProvider>
-        <WishListProvider>
-          <App />
-        </WishListProvider>
-      </CartProvider>
-      </ProductProvider>
+      <AuthProvider>
+        <ProductProvider>
+          <CartProvider>
+            <WishListProvider>
+              <App />
+            </WishListProvider>
+          </CartProvider>
+        </ProductProvider>
+      </AuthProvider>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
