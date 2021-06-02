@@ -40,6 +40,15 @@
   margin: 5px;
 }
 
+form > button {
+  background-color: gray;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}
+
 img {
   width: 50%;
   height: auto;

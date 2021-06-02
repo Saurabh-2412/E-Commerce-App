@@ -5,6 +5,7 @@ import { NavLink }  from "react-router-dom";
 import { useCartList } from "../../../Contexter/CartContext";
 import { ProductListing } from "../../Product/ProductListing";
 import { useAuth } from "../../../Contexter/AuthContext"
+import { useNavigate } from "react-router-dom";
 
 export function CartHeader() {
   const { cartList } = useCartList();
@@ -14,9 +15,9 @@ export function CartHeader() {
 }
 
 export function CartList() {
-  var { token } = useAuth()
   const { cartList, dispatchCart } = useCartList();
-  var  { token } = JSON.parse(localStorage?.getItem("login"));
+  const  { token,id } = JSON.parse(localStorage?.getItem("login")) || {};
+  const navigate = useNavigate();
 
   //fetching cart list data
   axios.interceptors.request.use(
@@ -31,13 +32,20 @@ export function CartList() {
 
   useEffect(() => {
     (async function () {
-      const { data } = await axios.get(
-        "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData"
-      );
-      //console.log("this is cart list items",data.cartProduct);
-      dispatchCart({ type: "Loading", payload: data.cartProduct })
+      try{
+        const { data } = await axios.get(
+          `https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/${id}`
+        );
+        console.log("this is cart list items",data.cartProduct);
+        dispatchCart({ type: "Loading", payload: data.cartProduct })
+      }
+      catch(err){
+        if(err.status){
+          return navigate('/login');
+        }
+      }
     })();
-  },[]);
+  },[token]);
 
   function TotalPrice(item) {
     return item.price * item.quantity;
@@ -67,7 +75,7 @@ export function CartList() {
       try{
         const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
         { "productId": productId, "quantity":quantity})
-        console.log("resp from server quantity", data)
+        //console.log("resp from server quantity", data)
         dispatchCart({ type: "Increment", payload: data.cart });
       }
       catch(err){

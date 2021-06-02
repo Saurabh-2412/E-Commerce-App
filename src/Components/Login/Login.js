@@ -5,6 +5,7 @@ import { useAuth } from "../../Contexter/AuthContext";
 
 export function Login() {
 	const { isUserLoggedIn, setIsUserLoggedIn, token } = useAuth();
+	const [notify, setNotify] = useState("");
 	const navigate = useNavigate();
 	const usernameRef = React.useRef();
 	const passwordRef = React.useRef();
@@ -46,8 +47,8 @@ export function Login() {
 				isUserLoggedIn || navigate("/");
 				localStorage?.setItem(
 					"login",
-					JSON.stringify({ isUserLoggedIn: true,token: 'abcdef' })
-				  );
+					JSON.stringify({ isUserLoggedIn:true, token:data.token, id:userId })
+				);
 			}
 		} else {
 			setIsUserLoggedIn((isUserLoggedIn) => !isUserLoggedIn);
@@ -63,21 +64,17 @@ export function Login() {
 	return (
 		<>
 			<h1>Login</h1>
-			<label>	Username :- 
-				<input type="text" ref={usernameRef} disabled={isUserLoggedIn ? true : false}/>
-			</label>
+			<label style={{marginRight:"15px"}}>UserID</label>
+			<input type="text" ref={usernameRef} disabled={isUserLoggedIn ? true : false} required/>
 			<br /><br />
-			<label>
-				Password :- 
-				<input type="password" ref={passwordRef} disabled={isUserLoggedIn ? true : false}/>
-			</label>
-			<br />
+			<label style={{marginRight:"4px"}}>Password</label>
+			<input type="password" ref={passwordRef} disabled={isUserLoggedIn ? true : false} required/>
+			<br /><br />
 			<button	onClick={handleSubmit}>
-				{isUserLoggedIn ? "Logged In" : "Logged out"}
+				{/** {isUserLoggedIn ? "Logged In" : "Logged out"} */}
+				{isUserLoggedIn ? "Logout" : "Login"}
 			</button>
-			<div>
-				<span onClick={SignUp}>SignUp?</span>
-			</div>
+			<button onClick={SignUp} disabled={isUserLoggedIn ? true : false}>SignUp?</button>
 		</>
 	);
 }

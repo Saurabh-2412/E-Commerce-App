@@ -1,7 +1,7 @@
 import './App.css';
 import { ProductListing } from "./Components/Product/ProductListing";
 import { CartList } from "./Components/PrivatePage/Cart/CartList";
-import { WishList } from "./Components/WishList/WishList";
+import { WishList } from "./Components/PrivatePage/WishList/WishList";
 import { Address } from "./Components/PrivatePage/Address"
 import { Login } from "./Components/Login/Login"
 import NavBar from "./Components/NavBar/NavBar";
@@ -40,7 +40,7 @@ function App() {
         <Route path="/" element={<ProductListing />} />
         <Route path="/home" element={<ProductListing />} />
         <PrivateRoute path="/cartlist" element={<CartList />} />
-        <Route path="/wishlist" element={<WishList />} />
+        <PrivateRoute path="/wishlist" element={<WishList />} />
         <Route path="/login" element={<Login />} />
 				<PrivateRoute path="/address" element={<Address />} />
         <Route path="/register" element={<Register />} />

@@ -1,7 +1,7 @@
 import { NavLink }  from "react-router-dom";
 import React,{useState} from "react";
 import { CartHeader } from "../PrivatePage/Cart/CartList";
-import { WishListHeader } from "../WishList/WishList";
+import { WishListHeader } from "../PrivatePage/WishList/WishList";
 import {Modal} from "../Modal"
 
 function NavBar() {
@@ -25,6 +25,8 @@ function NavBar() {
                 <NavLink to="/" style={{backgroundColor:"none"}} onClick={toggleNav}>Product</NavLink> {" "}
                 <NavLink to="cartlist" onClick={toggleNav}>Cart</NavLink> {" "}
                 <NavLink to="wishlist" onClick={toggleNav}>Wishlist</NavLink>
+                <NavLink to="address" onClick={toggleNav}>User Info</NavLink>
+                <NavLink to="login" onClick={toggleNav}>LogIN/LogOut</NavLink>
               </div>
             </div>
         </nav>

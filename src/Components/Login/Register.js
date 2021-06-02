@@ -19,36 +19,36 @@ export function Register() {
         setUserRegisteration({ ...userRegisteration, [name] : value});
     }
 
-    const min = 1;
-    const max = 100;
-    const rand = Math.floor(min + Math.random() * (max - min));
-
     async function handleSubmit(e) {
         e.preventDefault();
         //const newRecord = { ...userRegisteration, userId : new Date().getTime().toString()};
         //setRecords([ ...records, newRecord]);
         
         try {
-            const { resp, status } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/userData",
+            const { data, status } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/userData",
             {
-                _id:rand, name: userRegisteration.username, password: userRegisteration.password, mail: userRegisteration.email,
-                number: userRegisteration.number
+                name: userRegisteration.username, password: userRegisteration.password, mail: userRegisteration.email,
+                phone: userRegisteration.number
             })
+            console.log("server resp", data.UserRecord);
             if(status === 200){
-                //navigate("/Login")
+                const filteredData = data.UserRecord.filter((currentUser) => currentUser.name === userRegisteration.username);
+                setRecords(filteredData);
                 setUserRegisteration({username:"",email:"",number:"",password:""})
-                setVisible("block");
+                //setRecords(data.UserRecord);
             }
-            //console.log("server response", resp );
         }
         catch(err){
             console.log(err);
         }
-        //console.log("old record",records,"new record=>",newRecord)
     }
 
     const HandleReset = () => {
         setUserRegisteration([...records])
+    }
+
+    const loginHandler = () => {
+        navigate("/Login")
     }
 
     return (
@@ -57,30 +57,30 @@ export function Register() {
             <form action="" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="username" style={{margin:"10px"}}>FullName</label>
-                    <input type="text" onChange={handleInput} id="username" name="username" value={userRegisteration.username}/>
+                    <input type="text" onChange={handleInput} id="username" name="username" value={userRegisteration.username} required/>
                 </div><br/>
                 <div>
                     <label htmlFor="email" style={{margin:"20px"}}>E-Mail</label>
-                    <input type="text" onChange={handleInput} id="email" name="email" value={userRegisteration.email}/>
+                    <input type="text" onChange={handleInput} id="email" name="email" value={userRegisteration.email} required/>
                 </div><br/>
                 <div>
                     <label htmlFor="number" style={{margin:"18px"}}>Number</label>
-                    <input type="text" onChange={handleInput} id="number" name="number" value={userRegisteration.number}/>
+                    <input type="text" onChange={handleInput} id="number" name="number" value={userRegisteration.number} required/>
                 </div><br/>
                 <div>
                     <label htmlFor="password" style={{margin:"12px"}}>Password</label>
-                    <input type="password" onChange={handleInput} autoComplete="off" id="password" name="password" value={userRegisteration.password}/>
+                    <input type="password" onChange={handleInput} autoComplete="off" id="password" name="password" value={userRegisteration.password} required/>
                 </div><br/>
                 <button type="submit">Register</button>
                 <button type="reset" onClick={HandleReset}>Reset</button>
+                <button onClick={loginHandler}>Login</button>
             </form>
-            <div style={{display:visible}}>
+            <div style={{fontSize:"larger",padding:"1.7rem 0"}}>
                 {records.map((currentUser) => {
                     return (
-                        <p>
-                            <p>Hello {currentUser.name},<br/></p>
-                            <p>Please use this userId for LogingIn {rand}</p>
-                        </p>
+                        <div>
+                            <p>Hello {currentUser.name},<br/>Please use this userId for LogingIn {currentUser._id}</p>
+                        </div>
                     )
                 })}
             </div>

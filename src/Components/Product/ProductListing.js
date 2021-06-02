@@ -20,8 +20,7 @@ export const ProductListing = ({}) => {
   const { cartList, dispatchCart } = useCartList();
   const { wishList, dispatchWishList } = useWishList();
   const [accordian,setAccordian] = useState("none");
-  const [cartColor,setCartColor] = useState("active-icon-bttn");
-  const  token = JSON.parse(localStorage?.getItem("login"))
+  const  { token,id } = JSON.parse(localStorage?.getItem("login")) || {}
 
   useEffect(() => {
     (async function () {
@@ -29,7 +28,6 @@ export const ProductListing = ({}) => {
         "https://ecommercedata.saurabhsharma11.repl.co/v1/productData"
       );
       SetItemsInProduct(data);
-      //dispatchProduct({ type: "SET_INITIAL_DATA", payload: data});
     })();
   },[]);
 
@@ -50,8 +48,9 @@ export const ProductListing = ({}) => {
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
-          { product }
+          { ...product,userID:id }
         );
+        //console.log("this is from cart post response",data);
         dispatchCart({ type: "Added", payload: data.cart});
       } catch (err) {
         console.log(err);
@@ -67,7 +66,7 @@ export const ProductListing = ({}) => {
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
-          { product }
+          { ...product,userID:id }
         );
         //console.log("data posted in wish server",data.wish);
         if(wishList.some((item) => (item.id === product.id))){

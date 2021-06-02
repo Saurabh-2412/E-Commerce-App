@@ -4,8 +4,8 @@ export const wishListReducer = (state, action) => {
         return {
           ...state,
           wishList:action.payload,
-          displayWishlistModal: true,
-          wishlistModalContent: "Loading wishlist items"
+          //displayWishlistModal: true,
+          //wishlistModalContent: "Loading wishlist items"
         }
 
       case "Added":

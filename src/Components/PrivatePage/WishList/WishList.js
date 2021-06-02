@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import axios from "axios"
-import { useWishList } from "../../Contexter/WishListContext";
-import { useCartList } from "../../Contexter/CartContext";
+import { useWishList } from "../../../Contexter/WishListContext";
+import { useCartList } from "../../../Contexter/CartContext";
 import { NavLink }  from "react-router-dom";
 
 export function WishListHeader() {
@@ -14,8 +14,19 @@ export function WishListHeader() {
 export function WishList() {
   const { wishList, dispatchWishList } = useWishList();
   const { cartList, dispatchCart } = useCartList();
+  const  { token,id } = JSON.parse(localStorage?.getItem("login")) || {};
 
   //getting wish list data
+  axios.interceptors.request.use(
+    config => {
+      config.headers.authorization = token;
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    }
+  )
+
   useEffect(() => {
     (async function () {
       const { data } = await axios.get(
@@ -31,7 +42,7 @@ export function WishList() {
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
-          { product }
+          { ...product,userID:id }
         );
         dispatchCart({ type: "Added", payload: data.cart});
       } catch (err) {
@@ -56,8 +67,8 @@ export function WishList() {
       try{
         const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
         { "productId": productId, "quantity":quantity})
-        //console.log("resp from server quantity", data)
-        dispatchCart({ type: "Increment", payload: product });
+        console.log("resp from server quantity", data)
+        //dispatchCart({ type: "Increment", payload: product });
       }
       catch(err){
         console.log(err);
