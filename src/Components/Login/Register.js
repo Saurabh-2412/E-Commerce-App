@@ -1,9 +1,11 @@
 import React,{useState} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useProduct } from "../../Contexter/ProductContext";
 
 export function Register() {
     const navigate = useNavigate();
+    const { dispatchProduct } = useProduct();
     const [records, setRecords] = useState([]);
     const [visible,setVisible] = useState("none")
     const [userRegisteration, setUserRegisteration] = useState({
@@ -30,12 +32,13 @@ export function Register() {
                 name: userRegisteration.username, password: userRegisteration.password, mail: userRegisteration.email,
                 phone: userRegisteration.number
             })
-            console.log("server resp", data.UserRecord);
+            //console.log("server resp", data.UserRecord);
             if(status === 200){
                 const filteredData = data.UserRecord.filter((currentUser) => currentUser.name === userRegisteration.username);
                 setRecords(filteredData);
                 setUserRegisteration({username:"",email:"",number:"",password:""})
-                //setRecords(data.UserRecord);
+                dispatchProduct({ type:"Registered"});
+                navigate("/Login")
             }
         }
         catch(err){
@@ -75,15 +78,17 @@ export function Register() {
                 <button type="reset" onClick={HandleReset}>Reset</button>
                 <button onClick={loginHandler}>Login</button>
             </form>
-            <div style={{fontSize:"larger",padding:"1.7rem 0"}}>
-                {records.map((currentUser) => {
-                    return (
-                        <div>
-                            <p>Hello {currentUser.name},<br/>Please use this userId for LogingIn {currentUser._id}</p>
-                        </div>
-                    )
-                })}
-            </div>
+            {/**
+                <div style={{fontSize:"larger",padding:"1.7rem 0"}}>
+                    {records.map((currentUser) => {
+                        return (
+                            <div>
+                                <p>Hello {currentUser.name},<br/>Please use this userId for LogingIn {currentUser._id}</p>
+                            </div>
+                        )
+                    })}
+                </div>
+            */}
         </div>
     )
 }

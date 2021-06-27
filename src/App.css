@@ -174,7 +174,6 @@ img {
   font-size: 15px;
   /* transition: cubic-bezier(0.42, 0.71, 0, 1.22) 5s; */
   transition: cubic-bezier(1, 0.67, 0, 0.35) 2.5s;
-
   text-align: right;
 }
 

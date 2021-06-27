@@ -48,7 +48,7 @@ export const ProductListing = ({}) => {
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
-          { ...product,userID:id }
+          { product }
         );
         //console.log("this is from cart post response",data);
         dispatchCart({ type: "Added", payload: data.cart});
@@ -66,7 +66,7 @@ export const ProductListing = ({}) => {
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
-          { ...product,userID:id }
+          { product }
         );
         //console.log("data posted in wish server",data.wish);
         if(wishList.some((item) => (item.id === product.id))){
@@ -205,7 +205,6 @@ export const ProductListing = ({}) => {
             </label>
           </fieldset>
           
-          <h1>Products Listing</h1>
           <ul className="ProductList">
             {filteredData.map(function (product) {
               return (

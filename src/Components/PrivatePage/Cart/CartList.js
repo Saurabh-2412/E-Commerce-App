@@ -16,7 +16,7 @@ export function CartHeader() {
 
 export function CartList() {
   const { cartList, dispatchCart } = useCartList();
-  const  { token,id } = JSON.parse(localStorage?.getItem("login")) || {};
+  const  { token } = JSON.parse(localStorage?.getItem("login")) || {};
   const navigate = useNavigate();
 
   //fetching cart list data
@@ -34,18 +34,15 @@ export function CartList() {
     (async function () {
       try{
         const { data } = await axios.get(
-          `https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/${id}`
+          "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData"
         );
-        console.log("this is cart list items",data.cartProduct);
         dispatchCart({ type: "Loading", payload: data.cartProduct })
       }
       catch(err){
-        if(err.status){
-          return navigate('/login');
-        }
+        console.log(err)
       }
     })();
-  },[token]);
+  },[dispatchCart]);
 
   function TotalPrice(item) {
     return item.price * item.quantity;
@@ -54,7 +51,6 @@ export function CartList() {
   //removing cart data from server
   async function RemoveHandler(product){
     const productId = product._id;
-    //console.log("this is productID",productId)
     try {
       const { data } = 
         await axios.delete("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
@@ -64,36 +60,36 @@ export function CartList() {
         dispatchCart({ type: "Remove", payload: data.cartProduct })
       } catch (err) {
         console.log(err);
-      }
+    }
   }
 
   async function IncreaseAndDecrease(product,action){
-    const productId = product._id;
-
+    const productId = product.id;
     if(action === "Increment"){
       const quantity = product.quantity + 1;
       try{
         const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
         { "productId": productId, "quantity":quantity})
-        //console.log("resp from server quantity", data)
-        dispatchCart({ type: "Increment", payload: data.cart });
+        console.log("Increased", data)
+        dispatchCart({ type: "Increment", payload: data.cartItem });
       }
       catch(err){
         console.log(err);
       }
       //console.log("Increased");
+    } else if(product.quantity > 1) {
+        const quantity = product.quantity - 1;
+        try{
+          const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
+          { "productId": productId, "quantity":quantity})
+          console.log("Decreased", data)
+          dispatchCart({ type: "Decrement", payload: data.cartItem })
+        }
+        catch(err){
+          console.log(err);
+        }
     } else {
-      const quantity = product.quantity - 1;
-      try{
-        const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
-        { "productId": productId, "quantity":quantity})
-        console.log("resp from server quantity", data)
-        dispatchCart({ type: "Decrement", payload: product })
-      }
-      catch(err){
-        console.log(err);
-      }
-      console.log("decreased");
+
     }
   }
 
@@ -115,7 +111,7 @@ export function CartList() {
                         <p>Color : {product.color}</p>
                         <p>{product.offer}</p>
                         <p>Quantity :{product.quantity}<br/>
-                          <button className="btn btn-secondary btn-sm" name="+" onClick={() => IncreaseAndDecrease(product,"Increment")}>+</button>
+                          <button className="btn btn-secondary btn-sm" onClick={() => IncreaseAndDecrease(product,"Increment")}>+</button>
                           <button className="btn btn-secondary btn-sm" onClick={() => IncreaseAndDecrease(product,"Decrement")}>-</button>
                         </p>
                         <button className="btn btn-secondary btn-sm" onClick={() => RemoveHandler(product)}>Remove</button>

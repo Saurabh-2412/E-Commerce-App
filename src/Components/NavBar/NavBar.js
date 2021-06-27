@@ -26,7 +26,7 @@ function NavBar() {
                 <NavLink to="cartlist" onClick={toggleNav}>Cart</NavLink> {" "}
                 <NavLink to="wishlist" onClick={toggleNav}>Wishlist</NavLink>
                 <NavLink to="address" onClick={toggleNav}>User Info</NavLink>
-                <NavLink to="login" onClick={toggleNav}>LogIN/LogOut</NavLink>
+                <NavLink to="login" onClick={toggleNav}>LogIn/LogOut</NavLink>
               </div>
             </div>
         </nav>
@@ -62,7 +62,7 @@ function NavBar() {
               <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem"}}></span>
           </NavLink>
           <NavLink to="login">
-              <ion-icon name="person" style={{fontSize: "1.8rem",border:"3px solid gray",borderRadius: "53px"}}></ion-icon>
+              <ion-icon name="power" style={{fontSize: "1.8rem",border:"3px solid gray",borderRadius: "53px"}}></ion-icon>
               <span style={{color:"orange",fontWeight:"bolder",position: "relative",top: "-0.25rem"}}></span>
           </NavLink>
         </nav>

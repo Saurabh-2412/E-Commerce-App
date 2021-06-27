@@ -7,6 +7,7 @@ export const cartReducer = (state, action) => {
           //displayCartModal: true,
           //cartModalContent: "Loading cart items"
         };
+      
       case "Added":
         if (state.cartList.some((item) => item.id === action.payload.id)) {
           const increasedQuantity = state.cartList.map((item) => {
@@ -39,14 +40,14 @@ export const cartReducer = (state, action) => {
   
       case "Increment":
         const increasedQuantity = state.cartList.map((item) => {
-          //console.log(item.id);
           return item.id === action.payload.id
             ? { ...item, quantity: item.quantity + 1 }
             : item;
         });
         return {
-          ...state,
+          ...state.cartList,
           cartList: increasedQuantity,
+          //cartList:action.payload,
           displayCartModal: true,
           cartModalContent: "Quantity Increased"
         };
@@ -60,8 +61,9 @@ export const cartReducer = (state, action) => {
               : item;
           });
           return {
-            ...state,
+            ...state.cartList,
             cartList: decreasedQuantity,
+            //cartList:action.payload,
             displayCartModal: true,
             cartModalContent: "Quantity Decreased"
           };

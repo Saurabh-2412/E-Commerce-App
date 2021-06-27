@@ -124,6 +124,24 @@ export const productReducer = (state, action) => {
             displayModal: false,
         };
   
+      case "Registered":
+        return{
+          displayModal: true,
+          modalContent: "Registered successfully"
+        }
+
+      case "LoggedIN":
+        return{
+          displayModal: true,
+          modalContent: "Logged IN successfully"
+        }
+
+      case "LoggedOut":
+        return{
+          displayModal: true,
+          modalContent: "Logged out successfully"
+        }
+
       default:
         return state;
     }

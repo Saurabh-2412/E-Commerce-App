@@ -14,7 +14,7 @@ export function WishListHeader() {
 export function WishList() {
   const { wishList, dispatchWishList } = useWishList();
   const { cartList, dispatchCart } = useCartList();
-  const  { token,id } = JSON.parse(localStorage?.getItem("login")) || {};
+  const  { token } = JSON.parse(localStorage?.getItem("login")) || {};
 
   //getting wish list data
   axios.interceptors.request.use(
@@ -32,6 +32,8 @@ export function WishList() {
       const { data } = await axios.get(
         "https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData"
       );
+      //const filteredData = data.WishlistProduct.filter((wishItem) => wishItem.userID === id)
+      //dispatchWishList({ type: "Loading", payload: data.WishlistProduct })
       dispatchWishList({ type: "Loading", payload: data.WishlistProduct })
     })();
   },[]);
@@ -42,7 +44,7 @@ export function WishList() {
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
-          { ...product,userID:id }
+          { product }
         );
         dispatchCart({ type: "Added", payload: data.cart});
       } catch (err) {
@@ -62,13 +64,13 @@ export function WishList() {
 
     } else {
       //increasing quantity
-      const productId = product._id;
+      const productId = product.id;
       const quantity = product.quantity + 1;
       try{
         const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
-        { "productId": productId, "quantity":quantity})
-        console.log("resp from server quantity", data)
-        //dispatchCart({ type: "Increment", payload: product });
+        { "productId":productId, "quantity":quantity })
+        //console.log("resp from server quantity", data.cartItem)
+        dispatchCart({ type: "Increment", payload: data.cartItem });
       }
       catch(err){
         console.log(err);

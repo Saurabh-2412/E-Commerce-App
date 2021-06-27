@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export function Address() {
-  const  { token,id } = JSON.parse(localStorage?.getItem("login")) || {};
+  const  { token } = JSON.parse(localStorage?.getItem("login")) || {};
   const navigate = useNavigate();
   const [user, setUserData] = useState([]);
   
@@ -22,36 +22,27 @@ export function Address() {
     (async function () {
       try{
         const { data } = await axios.get(
-          `https://ecommercedata.saurabhsharma11.repl.co/v1/userData`,{userID:id}
+          "https://ecommercedata.saurabhsharma11.repl.co/v1/userData"
         );
-        console.log("this is user details",data.userData);
-        const filteredUser = data.userData.filter((currentUser) => currentUser._id === id);
-        setUserData(filteredUser);
+        setUserData(data.userData[0]);
       }
       catch(err){
-        if(err.status){
-          return navigate('/login');
-        }
+        console.log(err);
       }
     })();
-  },[token]);
+  },[]);
 
   return (
-    <>
-      <h1><em> User Details</em></h1>
-      <hr></hr>
+    <div>
+      <h1 style={{color:"orange",border:"2px solid gray",borderRadius:"5px"}}><em>User Details</em></h1>
       <ul style={{margin:"0",padding:"0"}}>
-        {user.map((userDetail) => {
-          return (
-            <li key={userDetail._id} style={{listStyleType:"none"}}>
-              <div>Name : {userDetail.name}</div>
-              <div>User-ID : {userDetail._id}</div>
-              <div>Email-ID: {userDetail.mail}</div>
-              <div>Contact-No : {userDetail.phone}</div>
-            </li>
-          )
-        })}
+        <li key={user._id} style={{listStyleType:"none"}}>
+        <div style={{padding:"15px 0",fontSize:"larger",color:"#41464b"}}>Name : {user.name}</div>
+        <div style={{padding:"15px 0",fontSize:"larger",color:"#41464b"}}>User-ID : {user._id}</div>
+        <div style={{padding:"15px 0",fontSize:"larger",color:"#41464b"}}>Email-ID: {user.mail}</div>
+        <div style={{padding:"15px 0",fontSize:"larger",color:"#41464b"}}>Contact-No : {user.phone}</div>
+        </li>
       </ul>
-    </>
+    </div>
   );
 }
