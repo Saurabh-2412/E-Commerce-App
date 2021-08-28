@@ -3,9 +3,7 @@ export const wishListReducer = (state, action) => {
       case "Loading":
         return {
           ...state,
-          wishList:action.payload,
-          //displayWishlistModal: true,
-          //wishlistModalContent: "Loading wishlist items"
+          wishList:action.payload
         }
 
       case "Added":
@@ -36,12 +34,12 @@ export const wishListReducer = (state, action) => {
         }
         
       case "Remove":
-        const newWishList = state.wishList.filter(
+        state.wishList.filter(
           (product) => product.id !== action.payload.id
         );
         return {
           ...state,
-          wishList: action.payload,//newWishList
+          wishList: action.payload,
           displayWishlistModal: true,
           wishlistModalContent: "Removed from wishlist"
         };

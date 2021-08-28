@@ -1,10 +1,8 @@
 import React,{useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export function Address() {
   const  { token } = JSON.parse(localStorage?.getItem("login")) || {};
-  const navigate = useNavigate();
   const [user, setUserData] = useState([]);
   
   //for fetching data

@@ -2,7 +2,6 @@ import { NavLink }  from "react-router-dom";
 import React,{useState} from "react";
 import { CartHeader } from "../PrivatePage/Cart/CartList";
 import { WishListHeader } from "../PrivatePage/WishList/WishList";
-import {Modal} from "../Modal"
 
 function NavBar() {
 

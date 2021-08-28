@@ -1,26 +1,16 @@
-import { data } from "../../Data/data";
 import React from "react";
 import axios from "axios";
 import { useState, useReducer, useEffect } from "react";
-import { useProduct } from "../../Contexter/ProductContext";
 import { useCartList } from "../../Contexter/CartContext";
 import { useWishList } from "../../Contexter/WishListContext";
-import { useAuth } from "../../Contexter/AuthContext"
 
 export const ProductListing = ({}) => {
-  const {isUserLoggedIn, setIsUserLoggedIn} = useAuth();
   const [ ItemsInProduct, SetItemsInProduct ] = useState([]);
-  const {
-    products,
-    cartItems,
-    wishItems,
-    dispatchProduct
-  } = useProduct();
 
   const { cartList, dispatchCart } = useCartList();
   const { wishList, dispatchWishList } = useWishList();
   const [accordian,setAccordian] = useState("none");
-  const  { token,id } = JSON.parse(localStorage?.getItem("login")) || {}
+  const  { token } = JSON.parse(localStorage?.getItem("login")) || {}
 
   useEffect(() => {
     (async function () {
@@ -32,8 +22,6 @@ export const ProductListing = ({}) => {
   },[]);
 
   async function CartHandler(product) {
-    //console.log("this is for server ",product)
-    //console.log(isUserLoggedIn)
     axios.interceptors.request.use(
       config => {
         config.headers.authorization = token;
@@ -43,14 +31,12 @@ export const ProductListing = ({}) => {
         return Promise.reject(error);
       }
     )
-    const productId = product._id;
     if(!cartList.some((item) => item.id === product.id)){
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
           { product }
         );
-        //console.log("this is from cart post response",data);
         dispatchCart({ type: "Added", payload: data.cart});
       } catch (err) {
         console.log(err);
@@ -83,7 +69,6 @@ export const ProductListing = ({}) => {
     //dispatchProduct({type:"Added to wish", payload: product});
   }
 
-  //filtering data
   const [
     { showInventoryAll, showFastDeliveryOnly, sortBy },
     dispatch

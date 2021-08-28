@@ -1,11 +1,8 @@
-import { data } from "../../Data/data";
 import React from "react";
 import axios from "axios";
 import { useState, useReducer, useEffect } from "react";
 
 import { useProduct } from "../../Contexter/ProductContext";
-import { useCartList } from "../../Contexter/CartContext";
-import { useWishList } from "../../Contexter/WishListContext";
 import ProductListing from "./ProductListing"
 
 export function FilteredData(){

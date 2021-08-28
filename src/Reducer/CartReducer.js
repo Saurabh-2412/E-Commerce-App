@@ -47,7 +47,6 @@ export const cartReducer = (state, action) => {
         return {
           ...state.cartList,
           cartList: increasedQuantity,
-          //cartList:action.payload,
           displayCartModal: true,
           cartModalContent: "Quantity Increased"
         };
@@ -55,7 +54,6 @@ export const cartReducer = (state, action) => {
       case "Decrement":
         if (action.payload.quantity > 1) {
           const decreasedQuantity = state.cartList.map((item) => {
-            //console.log(item.id);
             return item.id === action.payload.id
               ? { ...item, quantity: item.quantity - 1 }
               : item;
@@ -63,7 +61,6 @@ export const cartReducer = (state, action) => {
           return {
             ...state.cartList,
             cartList: decreasedQuantity,
-            //cartList:action.payload,
             displayCartModal: true,
             cartModalContent: "Quantity Decreased"
           };
@@ -80,20 +77,14 @@ export const cartReducer = (state, action) => {
         }
   
       case "Remove":
-        //console.log("from remove", action.payload);
-        // const newCartList = state.cartList.filter(
-        //   (product) => product.id !== action.payload.id
-        // );
-        //console.log("from remove reducer",newCartList)
         return {
           ...state,
-          cartList: action.payload,//newCartList
+          cartList: action.payload,
           displayCartModal: true,
           cartModalContent: "Removed from cart"
         };
 
       case "DISPLAY_MODAL":
-        //console.log("display modal from cart reducer")
         return {
           ...state,
           displayCartModal: false,
@@ -108,16 +99,12 @@ export const cartReducer = (state, action) => {
           });
           return {
             ...state,
-            cartList: MovedItem,
-            //displayCartModal: true,
-            //cartModalContent: "Moved to cart"
+            cartList: MovedItem
           };
         } else {
           return {
             ...state,
-            cartList: [...state.cartList, action.payload],
-            //displayCartModal: true,
-            //cartModalContent: "Moved to cart"
+            cartList: [...state.cartList, action.payload]
           };
         }
       default:

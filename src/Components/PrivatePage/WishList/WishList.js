@@ -16,7 +16,6 @@ export function WishList() {
   const { cartList, dispatchCart } = useCartList();
   const  { token } = JSON.parse(localStorage?.getItem("login")) || {};
 
-  //getting wish list data
   axios.interceptors.request.use(
     config => {
       config.headers.authorization = token;
@@ -40,7 +39,6 @@ export function WishList() {
 
   async function WishListHandler(product){
     if(!cartList.some((item) => item.id === product.id)){
-      //adding to cart list
       try {
         const {data} = await axios.post(
           "https://ecommercedata.saurabhsharma11.repl.co/v1/cartData",
@@ -50,12 +48,11 @@ export function WishList() {
       } catch (err) {
         console.log(err);
       }
-      //removing from wishlist
+
       try{
         const productId = product._id;
         const { data } = await axios.delete("https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
         { data:{"productId":productId}});
-        //console.log("deleted prod", data.wishProduct);
         dispatchWishList({ type: "Remove", payload: data.wishProduct })
       }
       catch(err){
@@ -63,35 +60,29 @@ export function WishList() {
       }
 
     } else {
-      //increasing quantity
       const productId = product.id;
       const quantity = product.quantity + 1;
       try{
         const { data } = await axios.post("https://ecommercedata.saurabhsharma11.repl.co/v1/cartData/cartUpdate",
         { "productId":productId, "quantity":quantity })
-        //console.log("resp from server quantity", data.cartItem)
         dispatchCart({ type: "Increment", payload: data.cartItem });
       }
       catch(err){
         console.log(err);
       }
-      //removing from wishlist
+
       try{
         const productId = product._id;
         const { data } = await axios.delete("https://ecommercedata.saurabhsharma11.repl.co/v1/wishlistData",
         { data:{"productId":productId}});
-        //console.log("deleted prod", data.wishProduct);
         dispatchWishList({ type: "Remove", payload: data.wishProduct })
       }
       catch(err){
         console.log(err);
       }
     }
-    //dispatchWishList({ type: "MoveToCart", payload: product });
-    //dispatchCart({ type: "MoveToCart", payload: product });
   }
 
-  //removing data from wishlist server
   async function Remove(product){
     try{
       const productId = product._id;

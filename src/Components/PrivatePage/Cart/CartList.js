@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {  useEffect } from "react";
 import axios from "axios"
 import { NavLink }  from "react-router-dom";
 import { useCartList } from "../../../Contexter/CartContext";
-import { ProductListing } from "../../Product/ProductListing";
-import { useAuth } from "../../../Contexter/AuthContext"
-import { useNavigate } from "react-router-dom";
 
 export function CartHeader() {
   const { cartList } = useCartList();
@@ -17,9 +14,7 @@ export function CartHeader() {
 export function CartList() {
   const { cartList, dispatchCart } = useCartList();
   const  { token } = JSON.parse(localStorage?.getItem("login")) || {};
-  const navigate = useNavigate();
 
-  //fetching cart list data
   axios.interceptors.request.use(
     config => {
       config.headers.authorization = token;
@@ -48,7 +43,6 @@ export function CartList() {
     return item.price * item.quantity;
   }
 
-  //removing cart data from server
   async function RemoveHandler(product){
     const productId = product._id;
     try {

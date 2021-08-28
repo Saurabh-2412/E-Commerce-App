@@ -1,6 +1,6 @@
-import React,{useEffect, useState} from "react";
+import React,{ useState} from "react";
 import axios from "axios";
-import { useNavigate,NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contexter/AuthContext";
 import { useProduct } from "../../Contexter/ProductContext";
 
@@ -12,17 +12,6 @@ export function Login() {
 	const usernameRef = React.useRef();
 	const passwordRef = React.useRef();
 	
-	/* useEffect(() => {
-		(async function () {
-			const userId = "60b4af4ee2cd0c0028a55988";
-			const password = "12345";
-		  const { data } = await axios.get(
-			"https://ecommercedata.saurabhsharma11.repl.co/v1/userData/60b4af4ee2cd0c0028a55988",{userId:userId, password: password}
-		  );
-		  console.log("this is user data",data);
-		})();
-	  },[]); */
-
 	async function handleSubmit() {
 		axios.interceptors.request.use(
 			config => {
@@ -83,12 +72,15 @@ export function Login() {
 			<input type="password" ref={passwordRef} disabled={isUserLoggedIn ? true : false} required/>
 			<br /><br />
 			<button	onClick={handleSubmit}>
-			{/** {isUserLoggedIn ? "Logged In" : "Logged out"} */}
 			{isUserLoggedIn ? "Logout" : "Login"}
 			</button>
 			<button onClick={SignUp} disabled={isUserLoggedIn ? true : false}>SignUp?</button>
 			<br/>
 			<p style={{fontSize:"larger",fontWeight:"600",color: "red"}}>{notify}</p>
+			<p>
+				UserID : sid@gmail.com<br/>
+				Password 12345
+			</p>
 		</>
 	);
 }

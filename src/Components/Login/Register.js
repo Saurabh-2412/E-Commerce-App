@@ -7,7 +7,6 @@ export function Register() {
     const navigate = useNavigate();
     const { dispatchProduct } = useProduct();
     const [records, setRecords] = useState([]);
-    const [visible,setVisible] = useState("none")
     const [userRegisteration, setUserRegisteration] = useState({
         username : "",
         email : "",
