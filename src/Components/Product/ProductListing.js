@@ -4,13 +4,23 @@ import { useState, useReducer, useEffect } from "react";
 import { useCartList } from "../../Contexter/CartContext";
 import { useWishList } from "../../Contexter/WishListContext";
 
-export const ProductListing = ({}) => {
+export const ProductListing = () => {
   const [ ItemsInProduct, SetItemsInProduct ] = useState([]);
 
   const { cartList, dispatchCart } = useCartList();
   const { wishList, dispatchWishList } = useWishList();
   const [accordian,setAccordian] = useState("none");
   const  { token } = JSON.parse(localStorage?.getItem("login")) || {}
+
+  axios.interceptors.request.use(
+    config => {
+      config.headers.authorization = token;
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    }
+  )
 
   useEffect(() => {
     (async function () {
@@ -22,16 +32,6 @@ export const ProductListing = ({}) => {
   },[]);
 
   async function CartHandler(product) {
-    axios.interceptors.request.use(
-      config => {
-        config.headers.authorization = token;
-        return config;
-      },
-      error => {
-        return Promise.reject(error);
-      }
-    )
-    
     if(!cartList.some((item) => item.id === product.id)){
       try {
         const {data} = await axios.post(
