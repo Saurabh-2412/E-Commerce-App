@@ -35,7 +35,7 @@ export function WishList() {
       //dispatchWishList({ type: "Loading", payload: data.WishlistProduct })
       dispatchWishList({ type: "Loading", payload: data.WishlistProduct })
     })();
-  },[]);
+  },[dispatchWishList]);
 
   async function WishListHandler(product){
     if(!cartList.some((item) => item.id === product.id)){

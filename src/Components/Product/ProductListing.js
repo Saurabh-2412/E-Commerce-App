@@ -31,6 +31,7 @@ export const ProductListing = ({}) => {
         return Promise.reject(error);
       }
     )
+    
     if(!cartList.some((item) => item.id === product.id)){
       try {
         const {data} = await axios.post(
