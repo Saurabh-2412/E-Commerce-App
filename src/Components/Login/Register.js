@@ -55,7 +55,7 @@ export function Register() {
 
     return (
         <div style={{padding:"10px"}}>
-            <h3>SignUp</h3>
+            <h3 style={{color:"#41464b"}}>Register ur'self with <i className="material-icons" style={{fontSize:"1.5rem"}}>&#xe8e5;</i>TC</h3>
             <form action="" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="username" style={{margin:"10px"}}>FullName</label>

@@ -143,6 +143,7 @@ export const ProductListing = () => {
     <div>
         <div>
           <button className="accordion" onClick={accordianViewer}>
+          {/* <p style={{backgroundColor:"none", color:"#41464b",float:"left"}}><i className="material-icons" style={{color:"orange"}}>&#xe8e5;</i></p> */}
             <ion-icon name="filter" style={{fontSize:"2rem",marginRight:"8px"}}></ion-icon>
           </button>
           <fieldset className="panel" style={{display:accordian}}>
