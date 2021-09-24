@@ -213,17 +213,25 @@ export const ProductListing = () => {
                   )}
                       <img src={product.image} alt={product.image} />
                       <br />
-                      Name : {product.name}<br />
-                      Price : {product.price}
+                      <p style={{margin:"0 0 0 10px",fontSize:"large",fontWeight:"bolder",float:"left"}}>Product : {product.name}</p><br />
+                      <p style={{margin:"0 0 0 10px",fontSize:"medium",float:"left"}}>Price : {product.price}</p><br />
+                      <p style={{margin:"0 0 0 -80px",fontSize:"medium",float:"left"}}>Offer : {product.offer}</p><br />
+                      <p style={{margin:"0 0 0 10px",fontSize:"medium",float:"left"}}></p><button style={{float:"right",margin:"6px 20px 0px 30px"}} onClick={() => CartHandler(product)}>Add to<ion-icon name="cart" style={{fontSize:"1rem"}}></ion-icon></button>
+                      <p style={{margin:"0 0 0 10px",fontSize:"medium",float:"left",fontStyle:"italic"}}>Material : {product.material}</p>
                       <br />
-                      Avalibility :{product.inStock && <span> In Stock </span>}
-                      {!product.inStock && <span> Out of Stock </span>}
-                      <br />
-                      {product.fastDelivery ? (
+                      <p style={{margin:"0 0 0 10px",fontSize:"medium",float:"left",fontStyle:"italic"}}>#idealfor : {product.idealFor}</p>
+                      <button style={{float:"right",margin:"6px 20px 0px 30px"}} onClick={() => WishListHandler(product)}>Add to<ion-icon name="heart" style={{fontSize:"1rem"}}></ion-icon></button><br />
+                      <p style={{margin:"0 0 0 10px",fontSize:"medium",float:"left",fontStyle:"italic"}}>
+                        Avalibility :{product.inStock && <span> In Stock </span>}
+                        {!product.inStock && <span> Out of Stock </span>}
+                      </p><br />
+                      {/**
+                      <p style={{margin:"0 0 0 10px",fontSize:"medium",float:"left"}}>{product.fastDelivery ? (
                         <div> Fast Delivery </div>
                       ) : (
                         <div> 4 days minimum </div>
-                      )}
+                      )}</p>
+                      */}
                 </li>
               );
             })}

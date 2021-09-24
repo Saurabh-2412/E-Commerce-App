@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contexter/AuthContext";
 import { useProduct } from "../../Contexter/ProductContext";
+//import { setupAuthHeaderForServiceCalls } from "../../Contexter/AuthContext";
 
 export function Login() {
 	const { dispatchProduct } = useProduct();
@@ -35,6 +36,58 @@ export function Login() {
 					if(status === 200){
 						setIsUserLoggedIn((isUserLoggedIn) => !isUserLoggedIn);
 						isUserLoggedIn || navigate("/");
+						//setupAuthHeaderForServiceCalls(data.token);
+						localStorage?.setItem(
+							"login",
+							JSON.stringify({ isUserLoggedIn:true, token:data.token })
+						);
+						dispatchProduct({type:"LoggedIN"})
+					} else if(status === 401 || status === 500){
+						setNotify("Invalid UserID or Password..!");
+					}
+				} else {
+					setNotify("Please enter valid UserID or Password..!");
+				}
+			}
+			catch(err){
+				setNotify("Invalid UserID or Password..!");
+			}
+		} else {
+			setIsUserLoggedIn((isUserLoggedIn) => !isUserLoggedIn);
+			isUserLoggedIn || navigate("/");
+			localStorage?.removeItem("login");
+			//setupAuthHeaderForServiceCalls(null);
+			dispatchProduct({type:"LoggedOut"})
+		}
+	};
+
+	function SignUp(){
+		navigate("/Register")
+	}
+
+	async function GuestLogin(){
+		axios.interceptors.request.use(
+			config => {
+				config.headers.authorization = token;
+				return config;
+			},
+			error => {
+				return Promise.reject(error);
+			}
+		)
+
+		if(!isUserLoggedIn){
+			try{
+				const userId = 'sid@gmail.com'
+				const password = '12345';
+				if(userId !== "" || password !== "") {
+					const { data,status } = await axios.post(
+						"https://ecommercedata.saurabhsharma11.repl.co/v1/userData/60b4af4ee2cd0c0028a55988",
+						{ userId:userId, password: password }
+					);
+					if(status === 200){
+						setIsUserLoggedIn((isUserLoggedIn) => !isUserLoggedIn);
+						isUserLoggedIn || navigate("/");
 						localStorage?.setItem(
 							"login",
 							JSON.stringify({ isUserLoggedIn:true, token:data.token })
@@ -56,10 +109,6 @@ export function Login() {
 			localStorage?.removeItem("login");
 			dispatchProduct({type:"LoggedOut"})
 		}
-	};
-
-	function SignUp(){
-		navigate("/Register")
 	}
 
 	return (
@@ -77,10 +126,7 @@ export function Login() {
 			<button onClick={SignUp} disabled={isUserLoggedIn ? true : false}>SignUp?</button>
 			<br/>
 			<p style={{fontSize:"larger",fontWeight:"600",color: "red"}}>{notify}</p>
-			<p>
-				UserID : sid@gmail.com<br/>
-				Password 12345
-			</p>
+			<button onClick={() => GuestLogin()}>Guest Credentials</button>
 		</>
 	);
 }

@@ -1,34 +1,33 @@
-import React,{useEffect, useState} from "react";
+import React,{ useEffect, useState } from "react";
 import axios from "axios";
+//import { useAuth } from "../../Contexter/AuthContext";
 
 export function Address() {
   const  { token } = JSON.parse(localStorage?.getItem("login")) || {};
   const [user, setUserData] = useState([]);
-  
-  //for fetching data
-  axios.interceptors.request.use(
-    config => {
-      config.headers.authorization = token;
-      return config;
-    },
-    error => {
-      return Promise.reject(error);
-    }
-  )
 
   useEffect(() => {
     (async function () {
+      axios.interceptors.request.use(
+        config => {
+          config.headers.authorization = token;
+          return config;
+        },
+        error => {
+          return Promise.reject(error);
+        }
+      )
       try{
         const { data } = await axios.get(
-          "https://ecommercedata.saurabhsharma11.repl.co/v1/userData"
+          "https://ecommercedata.saurabhsharma11.repl.co/v1/userData/userDetails",
         );
         setUserData(data.userData[0]);
       }
       catch(err){
-        console.log(err);
+        console.log(err)
       }
     })();
-  },[]);
+  },[token]);
 
   return (
     <div>
