@@ -225,13 +225,11 @@ export const ProductListing = () => {
                         Avalibility :{product.inStock && <span> In Stock </span>}
                         {!product.inStock && <span> Out of Stock </span>}
                       </p><br />
-                      {/**
                       <p style={{margin:"0 0 0 10px",fontSize:"medium",float:"left"}}>{product.fastDelivery ? (
-                        <div> Fast Delivery </div>
+                        <span></span>
                       ) : (
-                        <div> 4 days minimum </div>
+                        <span></span>
                       )}</p>
-                      */}
                 </li>
               );
             })}
